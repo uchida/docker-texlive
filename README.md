@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/uchida/docker-texlive.svg?maxAge=2592000)](https://tldrlegal.com/license/creative-commons-cc0-1.0-universal)
 [![MicroBadger](https://images.microbadger.com/badges/image/auchida/texlive.svg)](http://microbadger.com/images/auchida/texlive)
 
-basic scheme TeXLive installed docker image
+docker image with basic scheme TeXLive
 
 Docker image is available as [auchida/texlive](https://hub.docker.com/r/auchida/texlive/) in Docker Hub.
 
