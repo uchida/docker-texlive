@@ -9,3 +9,4 @@ RUN wget -q ftp://tug.org/historic/systems/texlive/2017/install-tl-unx.tar.gz\
  && tar -xzf install-tl-unx.tar.gz && cd install-tl-*\
  && echo I | ./install-tl -scheme scheme-basic\
  && cd .. && rm -rf install-tl*
+ENV PATH /usr/local/texlive/2017/bin/x86_64-linux:$PATH
