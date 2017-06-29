@@ -13,6 +13,12 @@ About texlive, consult [TeX Live - TeX Users Group](https://www.tug.org/texlive/
 
 - `latest`
 
+## Notice
+
+In this image, CTAN repository is set to a closest place to Docker Hub,
+run `tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet`
+before other `tlmgr` comamnds is recommended in your Dockerfile.
+
 ## License
 
 Contents on this repository are dedicated to [![CC0 public domain](http://i.creativecommons.org/p/zero/1.0/80x15.png "CC0 public domain")](https://creativecommons.org/publicdomain/zero/1.0/).
