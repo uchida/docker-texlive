@@ -18,5 +18,5 @@ About texlive, consult [TeX Live - TeX Users Group](https://www.tug.org/texlive/
 Contents on this repository are dedicated to [![CC0 public domain](http://i.creativecommons.org/p/zero/1.0/80x15.png "CC0 public domain")](https://creativecommons.org/publicdomain/zero/1.0/).
 No rights reserved.
 
-License for distributed Docker images follows one of [Debianu Project](https://www.debian.org/legal/licenses/),
+License for distributed Docker images follows one of [Debian Project](https://www.debian.org/legal/licenses/),
 [TeXLive](https://www.tug.org/texlive/copying.html) and its dependencies.
