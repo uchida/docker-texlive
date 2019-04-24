@@ -11,7 +11,7 @@ About texlive, consult [TeX Live - TeX Users Group](https://www.tug.org/texlive/
 
 ## Image tags
 
-- `latest`
+- `latest`, `2018`
 
 ## License
 
