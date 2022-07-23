@@ -113,5 +113,10 @@ workflows:
           requires:
             - build_push_amd64
             - build_push_arm64
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
           context:
             - docker-hub
