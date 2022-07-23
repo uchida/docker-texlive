@@ -85,25 +85,29 @@ workflows:
           context:
             - docker-hub
   publish:
-    when:
-      or:
-        - equal: [master, <<pipeline.git.branch>>]
-        - matches:
-            pattern: ".+"
-            value: <<pipeline.git.tag>>
     jobs:
       - build_push:
           name: build_push_amd64
           resource_class: medium
           arch: amd64
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
           context:
             - docker-hub
       - build_push:
           name: build_push_arm64
-          context:
-            - docker-hub
           resource_class: arm.medium
           arch: arm64
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+          context:
+            - docker-hub
       - push_manifest:
           name: push_manifest
           requires:
