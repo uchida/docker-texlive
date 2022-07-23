@@ -1,5 +1,4 @@
 FROM debian:11.4-slim AS installer
-MAINTAINER Akihiro Uchida <uchida@turbare.net>
 RUN apt-get update\
  && apt-get install --no-install-recommends -y wget=* perl=* xz-utils=* gnupg=* ca-certificates=*\
  && rm -rf /var/lib/apt/lists/*
