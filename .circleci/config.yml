@@ -1,0 +1,113 @@
+version: 2.1
+
+commands:
+  docker-login:
+    steps:
+      - run: echo $DOCKER_PASSWORD | docker login --password-stdin -u $DOCKER_LOGIN
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2004:2022.04.1
+      resource_class: <<parameters.resource_class>>
+    parameters:
+      resource_class:
+        type: enum
+        enum: ["medium", "arm.medium"]
+      arch:
+        type: enum
+        enum: ["amd64", "arm64"]
+    steps: &build-push-steps
+      - checkout
+      - docker-login
+      - run: |
+          if [ -n "<<pipeline.git.tag>>" ]; then
+            tag="<<pipeline.git.tag>>"
+          else
+            tag="latest"
+          fi
+          docker build -t "auchida/texlive:${tag}-<<parameters.arch>>" .
+
+  build_push:
+    machine:
+      image: ubuntu-2004:2022.04.1
+      resource_class: <<parameters.resource_class>>
+    parameters:
+      resource_class:
+        type: enum
+        enum: ["medium", "arm.medium"]
+      arch:
+        type: enum
+        enum: ["amd64", "arm64"]
+    steps: &build-push-steps
+      - checkout
+      - docker-login
+      - run: |
+          if [ -n "<<pipeline.git.tag>>" ]; then
+            tag="<<pipeline.git.tag>>"
+          else
+            tag="latest"
+          fi
+          docker build -t "auchida/texlive:${tag}-<<parameters.arch>>" .
+          docker push "auchida/texlive:${tag}-<<parameters.arch>>"
+
+  push_manifest:
+    machine:
+      image: ubuntu-2004:2022.04.1
+    steps:
+      - checkout
+      - docker-login
+      - run: |
+          if [ -n "<<pipeline.git.tag>>" ]; then
+            tag="<<pipeline.git.tag>>"
+          else
+            tag="latest"
+          fi
+          docker manifest create "auchida/texlive:${tag}" \
+            "auchida/texlive:${tag}-amd64" \
+            "auchida/texlive:${tag}-arm64"
+          docker manifest push "auchida/texlive:${tag}"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          name: build_amd64
+          resource_class: medium
+          arch: amd64
+          context:
+            - docker-hub
+      - build:
+          name: build_arm64
+          resource_class: arm.medium
+          arch: arm64
+          context:
+            - docker-hub
+  publish:
+    when:
+      or:
+        - equal: [master, <<pipeline.git.branch>>]
+        - matches:
+            pattern: ".+"
+            value: <<pipeline.git.tag>>
+    jobs:
+      - build_push:
+          name: build_push_amd64
+          resource_class: medium
+          arch: amd64
+          context:
+            - docker-hub
+      - build_push:
+          name: build_push_arm64
+          context:
+            - docker-hub
+          resource_class: arm.medium
+          arch: arm64
+      - push_manifest:
+          name: push_manifest
+          requires:
+            - build_push_amd64
+            - build_push_arm64
+          context:
+            - docker-hub
