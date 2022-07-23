@@ -43,11 +43,7 @@ jobs:
       - checkout
       - docker-login
       - run: |
-          if [ -n "<<pipeline.git.tag>>" ]; then
-            tag="<<pipeline.git.tag>>"
-          else
-            tag="latest"
-          fi
+          tag="<<pipeline.git.tag>>"
           docker build -t "auchida/texlive:${tag}-<<parameters.arch>>" .
           docker push "auchida/texlive:${tag}-<<parameters.arch>>"
 
@@ -58,15 +54,15 @@ jobs:
       - checkout
       - docker-login
       - run: |
-          if [ -n "<<pipeline.git.tag>>" ]; then
-            tag="<<pipeline.git.tag>>"
-          else
-            tag="latest"
-          fi
+          tag="<<pipeline.git.tag>>"
           docker manifest create "auchida/texlive:${tag}" \
             "auchida/texlive:${tag}-amd64" \
             "auchida/texlive:${tag}-arm64"
           docker manifest push "auchida/texlive:${tag}"
+          docker manifest create "auchida/texlive:latest" \
+            "auchida/texlive:${tag}-amd64" \
+            "auchida/texlive:${tag}-arm64"
+          docker manifest push "auchida/texlive:latest"
 
 workflows:
   version: 2
